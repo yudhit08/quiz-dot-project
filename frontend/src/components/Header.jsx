@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 
 const Header = () => {
 	const user = useSelector((state) => state.user);
-	const { username, score } = user;
+	const { username, highscore } = user;
 
 	return (
 		<Box
@@ -20,7 +20,7 @@ const Header = () => {
 		>
 			<Box display="flex" alignItems="center" gap="20px">
 				<Avatar>{username.split("")[0].toUpperCase()}</Avatar>
-        <Chip label={score ? score : "0"} />
+        <Chip label={highscore ? highscore : "0"} />
 			</Box>
 		</Box>
 	);

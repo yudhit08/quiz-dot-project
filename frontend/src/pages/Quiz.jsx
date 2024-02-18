@@ -32,17 +32,17 @@ const Quiz = () => {
 	const dispatch = useDispatch();
 
 	const [numberQuiz, setNumberQuiz] = useState(
-		location.pathname.split("/")[2] - 1
+		location.pathname.split("/")[2]
 	);
 	const [datas, setDatas] = useState({});
 
 	useEffect(() => {
-		if (numberQuiz === 0) {
-      setInterval(() => {
-        dispatch(startTimer());
-        console.log("timer: ", timer);
-      }, 1000);
-		}
+		// if (numberQuiz === 0) {
+    //   setInterval(() => {
+    //     dispatch(startTimer());
+    //     console.log("timer: ", timer);
+    //   }, 1000);
+		// }
 		async function getDataApi() {
 			setDatas({
 				question: decodeHtml(quiz.results[numberQuiz].question),
@@ -63,17 +63,26 @@ const Quiz = () => {
 
 	const handleSubmit = (e) => {
 		const userAnswer = e.target.innerText;
+    setNumberQuiz((prevNumber) => parseInt(prevNumber, 10) + 1);
 		console.log(user);
+
+    if (numberQuiz == 4) {
+      navigate("/")
+      dispatch(updateScore({score: user.highScore}))
+      .then((res) => {
+        console.log(res)
+      })
+    }
 
 		if (userAnswer === datas.answer) {
 			dispatch(addScore(10))
+
 			console.log(user);
 		}
+    
+    
 
-    // dispatch(updateScore({score: user.highScore}))
-    // .then((res) => {
-    //   console.log(res)
-    // })
+    navigate(`/play/${numberQuiz}`);
 	};
 
 	return (

@@ -8,32 +8,67 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Button from "@mui/material/Button";
 import { categories, difficulty, types } from "../lib/quiz";
-import { Box } from "@mui/material";
+import { Box, TextField } from "@mui/material";
 import Header from "../components/Header";
 import { useDispatch } from "react-redux";
 import { getQuiz } from "../slices/quizSlice";
 
 function Category() {
+	const [isSet, setIsSet] = useState(true);
 	const [apiData, setApiData] = useState({
-		number: 50,
+		number: 5,
 		category: "Any Category",
 		difficulty: "Any Difficulty",
 		type: "Any Type",
 	});
 
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
-  const handleSubmit = () => {
-    dispatch(getQuiz(apiData))
-    .then(res => {
-      console.log(res.payload.results)
-      navigate("/play/1")
-    })
-  }
+	const handleSubmit = () => {
+		isSet &&
+			dispatch(getQuiz(apiData)).then((res) => {
+				console.log(res.payload.results);
+				navigate("/play/0");
+			});
+	};
+
+	function checkInputValue() {
+		if (apiData.number < 1 || apiData.number > 50) {
+			return (
+				<TextField
+					error
+					inputProps={{ type: "number", min: "1", max: "50" }}
+					id="outlined-error-helper-text"
+					label="Number of Question"
+					value={apiData.number}
+					onChange={handleChange}
+					helperText="Value must be between 1 and 50"
+					name="number"
+				/>
+			);
+		} else {
+			return (
+				<TextField
+					inputProps={{ type: "number", min: "1", max: "50" }}
+					name="number"
+					value={apiData.number}
+					onChange={handleChange}
+					id="outlined-basic"
+					label="Number of Question"
+					variant="outlined"
+				/>
+			);
+		}
+	}
 
 	function handleChange(event) {
 		const { name, value } = event.target;
+		if (name === "number" && (value < 1 || value > 50)) {
+			setIsSet(false);
+		} else {
+			setIsSet(true);
+		}
 		setApiData((prevApiData) => {
 			return {
 				...prevApiData,
@@ -55,7 +90,7 @@ function Category() {
 				maxWidth="40rem"
 				gap="2rem"
 				margin="0 auto"
-        padding="50px"
+				padding="50px"
 			>
 				<h1>Set your Quiz</h1>
 				<FormControl fullWidth>
@@ -120,22 +155,27 @@ function Category() {
 						})}
 					</Select>
 				</FormControl>
-				<Box display="flex" justifyContent="center" width="100%" flexDirection="column">
+				<Box
+					display="flex"
+					justifyContent="center"
+					width="100%"
+					flexDirection="column"
+				>
 					{/* <Link to="/">
 						<Fab size="medium" aria-label="back">
 							<ArrowBackIcon />
 						</Fab>
 					</Link> */}
 					{/* <Link to={isSet ? "/play-quiz" : ""}> */}
-						<Button
-              fullWidth
-							className="start-btn"
-							variant="contained"
-              color="success"
-							onClick={handleSubmit}
-						>
-							Start
-						</Button>
+					<Button
+						fullWidth
+						className="start-btn"
+						variant="contained"
+						color="success"
+						onClick={handleSubmit}
+					>
+						Start
+					</Button>
 					{/* </Link> */}
 				</Box>
 			</Box>
