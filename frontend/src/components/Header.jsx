@@ -15,11 +15,11 @@ const Header = () => {
       justifyContent="flex-end"
 			top="0"
 			zIndex="1000"
-      borderBottom="1px solid #ffffff30"
+      borderBottom="1px solid #eeeeee"
       bgcolor="#42424230"
 		>
 			<Box display="flex" alignItems="center" gap="20px">
-				<Avatar></Avatar>
+				<Avatar>{username.split("")[0].toUpperCase()}</Avatar>
         <Chip label={score ? score : "0"} />
 			</Box>
 		</Box>

@@ -1,12 +1,11 @@
-import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { categories, difficulty, types } from "../lib/quiz";
 import { Box } from "@mui/material";
@@ -15,9 +14,8 @@ import { useDispatch } from "react-redux";
 import { getQuiz } from "../slices/quizSlice";
 
 function Category() {
-	const [isSet, setIsSet] = useState(true);
 	const [apiData, setApiData] = useState({
-		number: 5,
+		number: 50,
 		category: "Any Category",
 		difficulty: "Any Difficulty",
 		type: "Any Type",
@@ -36,48 +34,12 @@ function Category() {
 
 	function handleChange(event) {
 		const { name, value } = event.target;
-		if (name === "number" && (value < 1 || value > 50)) {
-			setIsSet(false);
-		} else {
-			setIsSet(true);
-		}
 		setApiData((prevApiData) => {
 			return {
 				...prevApiData,
 				[name]: value,
 			};
 		});
-	}
-
-	function checkInputValue() {
-		if (apiData.number < 1 || apiData.number > 50) {
-			return (
-				<TextField
-					error
-					// inputProps={{ type: "number", min: "1", max: "50" }}
-					inputProps={{ type: "text" }}
-					id="outlined-error-helper-text"
-					label="Number of Question"
-					value={apiData.number}
-					onChange={handleChange}
-					helperText="Value must be between 1 and 50"
-					name="number"
-				/>
-			);
-		} else {
-			return (
-				<TextField
-					// inputProps={{ type: "number", min: "1", max: "50" }}
-					inputProps={{ type: "text" }}
-					id="outlined-error-helper-text"
-					label="Number of Question"
-					value={apiData.number}
-					onChange={handleChange}
-					helperText="Value must be between 1 and 50"
-					name="number"
-				/>
-			);
-		}
 	}
 
 	return (
@@ -96,7 +58,6 @@ function Category() {
         padding="50px"
 			>
 				<h1>Set your Quiz</h1>
-				<FormControl fullWidth>{checkInputValue()}</FormControl>
 				<FormControl fullWidth>
 					<InputLabel htmlFor="category">Select Category</InputLabel>
 					<Select
