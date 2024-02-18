@@ -107,6 +107,39 @@ exports.auth = (req, res, next) => {
 	});
 };
 
+exports.updateScore = (req, res) => {
+	let token = req.headers["x-access-token"];
+
+	if (!token) {
+		return res.status(403).send({
+			message: "No token provided!",
+		});
+	}
+
+	jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decoded) => {
+		if (err) {
+			return res.status(401).send({
+				message: "Unauthorized!",
+			});
+		}
+
+    console.log(req.body.score)
+
+    if (req.body.score > decoded.highScore) {
+      User.findOneAndUpdate({username: decoded.username}, {highscore: req.body.score})
+        .then((data) => {
+          console.log(data);
+  
+          res.status(200).send(data);
+        })
+        .catch((err) => {
+          res.status(500).send({ message: "Internal Error", err });
+        });
+    }
+
+	});
+};
+
 exports.highScore = (req, res) => {
 	let token = req.headers["x-access-token"];
 

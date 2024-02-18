@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { nanoid } from "nanoid";
 import { startTimer } from "../slices/timerSlice";
+import { addScore, updateScore } from "../slices/userSlice";
 
 function shuffleArray(arr) {
 	for (let i = arr.length - 1; i > 0; i--) {
@@ -25,6 +26,7 @@ function decodeHtml(html) {
 const Quiz = () => {
 	const quiz = useSelector((state) => state.quiz);
 	const timer = useSelector((state) => state.timer);
+	const user = useSelector((state) => state.user);
 	const navigate = useNavigate();
 	const location = useLocation();
 	const dispatch = useDispatch();
@@ -36,7 +38,10 @@ const Quiz = () => {
 
 	useEffect(() => {
 		if (numberQuiz === 0) {
-			dispatch(startTimer(2));
+      setInterval(() => {
+        dispatch(startTimer());
+        console.log("timer: ", timer);
+      }, 1000);
 		}
 		async function getDataApi() {
 			setDatas({
@@ -51,37 +56,47 @@ const Quiz = () => {
 			});
 		}
 		getDataApi();
-		console.log("timer: ", timer);
 
 		console.log(quiz.results[numberQuiz].question);
 		console.log(datas);
 	}, [location.pathname]);
 
-	const handleSubmit = () => {
-		setNumberQuiz((prevNumber) => parseInt(prevNumber, 10) + 1);
-		navigate(`/play/${numberQuiz}`);
+	const handleSubmit = (e) => {
+		const userAnswer = e.target.innerText;
+		console.log(user);
+
+		if (userAnswer === datas.answer) {
+			dispatch(addScore(10))
+			console.log(user);
+		}
+
+    // dispatch(updateScore({score: user.highScore}))
+    // .then((res) => {
+    //   console.log(res)
+    // })
 	};
 
 	return (
 		<>
 			<Header />
 			<Grid
-        container
+				container
 				alignItems="center"
 				justifyContent="center"
-        justifyItems="center"
+				justifyItems="center"
 				padding="50px"
 				marginTop="100px"
 				minHeight="100vh"
 				// gridTemplateColumns="repeat(4, 1fr)"
 				// gridTemplateRows="repeat(2, 1fr)"
-        columnSpacing={2}
+				spacing={2}
+				gap="10px"
 			>
 				<Grid
-          item
-          xs={12}
+					item
+					xs={12}
 					width="100%"
-					height="100%"
+					height="300px"
 					bgcolor="#ffffff20"
 					padding="20px"
 					borderRadius="20px"
@@ -98,18 +113,19 @@ const Quiz = () => {
 				{datas?.options?.map((option, i) => {
 					return (
 						<Grid
-              item
-              xs={12}
-              md={3}
+							item
+							xs={12}
+							md={3}
 							key={i}
+							display="flex"
 							alignItems="center"
 							justifyContent="center"
-              bgcolor="#ffffff20"
-              height="100%"
-              borderRadius="20px"
-              padding="20px"
-              onClick={handleSubmit}
-              sx={{cursor: "pointer"}}
+							bgcolor="#ffffff20"
+							height="300px"
+							borderRadius="20px"
+							padding="20px"
+							onClick={handleSubmit}
+							sx={{ cursor: "pointer" }}
 						>
 							<Typography>{option}</Typography>
 						</Grid>

@@ -15,8 +15,8 @@ const Header = () => {
       justifyContent="flex-end"
 			top="0"
 			zIndex="1000"
-      borderBottom="1px solid #eeeeee"
-      bgcolor="#42424230"
+      borderBottom="1px solid #eeeeee30"
+      bgcolor="#212121"
 		>
 			<Box display="flex" alignItems="center" gap="20px">
 				<Avatar>{username.split("")[0].toUpperCase()}</Avatar>

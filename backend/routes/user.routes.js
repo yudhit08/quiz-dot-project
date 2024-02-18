@@ -12,4 +12,5 @@ module.exports = (app) => {
 	app.post("/api/user/login", user.login);
 	app.post("/api/user/auth", user.auth);
 	app.post("/api/user/highscore", user.highScore);
+	app.post("/api/user/score", user.updateScore);
 };
